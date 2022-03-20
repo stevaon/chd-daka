@@ -165,7 +165,7 @@ def run():
             "longitude": env_dist['longitude'],  # 108.954232,
             "accuracy": 100
             })
-    task(env_dist['username'], env_dist['password'], env_dist['address'], position)
+    task(env_dist['username'], env_dist['password'], env_dist['address'], position, env_dist['wxkey'])
     # sendMail(env_dist['email'], env_dist['username'], '自动打卡回执', add)
     # position = dict({
     #         "latitude":  34.226692,
