@@ -144,7 +144,7 @@ def task(username, password, address, position, wxkey):
         if status == '上级部门已确认':
             output_data = '未到打卡时间🙃' 
         print(output_data)
-        # driver.get("https://sctapi.ftqq.com/" + wxkey +".send?title="+ username + "打卡失败🙃,请自行打卡" + "&desp=" + output_data)
+        driver.get("https://sctapi.ftqq.com/" + wxkey +".send?title="+ username + "打卡失败🙃,请自行打卡" + "&desp=" + output_data)
          
     driver.quit()
             # return True
@@ -155,29 +155,29 @@ def task(username, password, address, position, wxkey):
         # driver.save_screenshot(str(username) + "_fail.png")
         # return False
 def run():
-    # env_dist = os.environ
-    # position = dict({
-    #         "latitude": env_dist['latitude'],    # 34.226692,
-    #         "longitude": env_dist['longitude'],  # 108.954232,
-    #         "accuracy": 100
-    #         })
-    # task(env_dist['username'], env_dist['password'], env_dist['address'], position, env_dist['wxkey'])
-    # sendMail(env_dist['email'], env_dist['username'], '自动打卡回执', add)
+    env_dist = os.environ
     position = dict({
-            "latitude":  34.226692,
-            "longitude": 108.954232,
+            "latitude": env_dist['latitude'],    # 34.226692,
+            "longitude": env_dist['longitude'],  # 108.954232,
             "accuracy": 100
             })
-    with open('config.json', 'r', encoding='utf-8') as f:
-        CONFIG = json.load(f)
-        users = CONFIG['userInfo']
-        address = CONFIG['address']
-        mail = CONFIG['mailInfo']
+    task(env_dist['username'], env_dist['password'], env_dist['address'], position, env_dist['wxkey'])
+    # sendMail(env_dist['email'], env_dist['username'], '自动打卡回执', add)
+    # position = dict({
+    #         "latitude":  34.226692,
+    #         "longitude": 108.954232,
+    #         "accuracy": 100
+    #         })
+    # with open('config.json', 'r', encoding='utf-8') as f:
+    #     CONFIG = json.load(f)
+    #     users = CONFIG['userInfo']
+    #     address = CONFIG['address']
+    #     mail = CONFIG['mailInfo']
 
-    for user in users:
-        add = address[random.randint(1, len(address) - 1)]
-        flag = task(username = user['id'], password = user['pw'], address = add, wxkey='', position=position)
-        intitle = "自动打卡回执"
+    # for user in users:
+    #     add = address[random.randint(1, len(address) - 1)]
+    #     flag = task(username = user['id'], password = user['pw'], address = add, wxkey='', position=position)
+    #     intitle = "自动打卡回执"
         # sendMail(mailInfo=mail, userInfo=user, intitle=intitle, flag=flag, address=add)
         # time.sleep(random.randint(120, 180))
 if __name__ == "__main__":
