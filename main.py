@@ -1,11 +1,10 @@
-from lib2to3.pgen2 import driver
 import time
 import os
-from email.mime.image import MIMEImage
-from smtplib import SMTP_SSL
+# from email.mime.image import MIMEImage
+# from smtplib import SMTP_SSL
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-from apscheduler.schedulers.background import BackgroundScheduler
+# from apscheduler.schedulers.background import BackgroundScheduler
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
