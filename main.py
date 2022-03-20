@@ -77,7 +77,7 @@ def task(username, password, address, position, wxkey):
     chrome_option.add_argument('--no-sandbox')
     chrome_option.add_argument('--hide-scrollbars')
     chrome_option.add_experimental_option('excludeSwitches', ['enable-automation'])
-    driver = webdriver.Chrome(chrome_options=chrome_option)
+    driver = webdriver.Chrome(options=chrome_option)
     # driver = webdriver.Chrome()
     # driver.set_window_size(500, 940)
     #登录
