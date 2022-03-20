@@ -128,7 +128,9 @@ def task(username, password, address, position, wxkey):
         )
         area.click()
         time.sleep(3)
+        print(address)
         pos = driver.find_element_by_xpath('//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/div[2]').text
+        print(pos)
         output_data += f'当前地址:{pos}{address}\n'
         # print()
         #自己输入的地理位置
