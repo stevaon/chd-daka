@@ -4,12 +4,9 @@ import os
 # from smtplib import SMTP_SSL
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-# from apscheduler.schedulers.background import BackgroundScheduler
 from selenium.webdriver.support.wait import WebDriverWait
-
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support import expected_conditions as EC
 
 # 邮件推送
@@ -139,6 +136,7 @@ def task(username, password, address, position, wxkey):
         )
         commit.click()
         time.sleep(2)
+        # 打卡结果信息
         name = driver.find_element_by_xpath('//*[@id="app"]/div/div[2]/div[2]/div[1]').text
         gh = driver.find_element_by_xpath('//*[@id="app"]/div/div[2]/div[2]/div[2]').text
         date = driver.find_element_by_xpath('//*[@id="app"]/div/div[2]/div[2]/div[3]').text
