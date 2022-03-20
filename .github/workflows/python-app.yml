@@ -45,6 +45,6 @@ jobs:
         wxkey: ${{ secrets.wxkey}}
         # email: ${{ secrets.email }}
         latitude: ${{ secrets.latitude }}
-        longitudu: ${{ secrets.longitudu }}
+        longitude: ${{ secrets.longitude }}
       run: |
         python main.py
