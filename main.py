@@ -1,12 +1,8 @@
 from lib2to3.pgen2 import driver
 import time
-import json
-import random
 import os
 from email.mime.image import MIMEImage
 from smtplib import SMTP_SSL
-from cv2 import add
-from httpx import main
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from apscheduler.schedulers.background import BackgroundScheduler
