@@ -1,7 +1,8 @@
+from lib2to3.pgen2 import driver
 import time
 import os
 # from email.mime.image import MIMEImage
-# from smtplib import SMTP_SSL
+from smtplib import SMTP_SSL
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
@@ -74,7 +75,10 @@ def task(username, password, address, position, wxkey):
     chrome_option.add_argument('--no-sandbox')
     chrome_option.add_argument('--hide-scrollbars')
     chrome_option.add_experimental_option('excludeSwitches', ['enable-automation'])
-    driver = webdriver.Chrome(options=chrome_option)
+    # action端
+    driver = webdriver.Chrome('/usr/bin/chromedriver', options=chrome_option)
+    # win端
+    # driver = webdriver.Chrome(options=chrome_option)
     # driver = webdriver.Chrome()
     # driver.set_window_size(500, 940)
     #登录
