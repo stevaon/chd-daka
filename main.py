@@ -84,27 +84,16 @@ def task(username, password, address, position, wxkey):
     # driver = webdriver.Chrome()
     # driver.set_window_size(500, 940)
     #登录
+    url_login='https://cdjk.chd.edu.cn'
+    driver.get(url_login)
+    time.sleep(3)
+    driver.find_element_by_xpath('//*[@id="username"]').send_keys(username)
+    time.sleep(1)
+    driver.find_element_by_xpath('//*[@id="password"]').send_keys(password,Keys.ENTER)
+
+    # 判断是否在打卡时间段
     try:
-        url_login='https://cdjk.chd.edu.cn'
-        driver.get(url_login)
-        time.sleep(3)
-        # 判断是否正确进入登陆页面
-        # while True:
-        # if driver.title == "统一身份认证平台":
-        #     print(driver.title)
-                # break
-            # driver.get(url_login)
-        # 获取用户与密码输入框并输入
-        driver.find_element_by_xpath('//*[@id="username"]').send_keys(username)
-        time.sleep(1)
-        driver.find_element_by_xpath('//*[@id="password"]').send_keys(password,Keys.ENTER)
-        # 如果跳转到打卡页面,退出循环
-        title = driver.title
-        if title=='每日健康打卡':
-            output_data = f'{username}登陆成功😝\n'
-        else:
-            output_data = f'{username}登录失败🙃\n'
-           
+        output_data = '准备打卡😝...'
         # 伪装地址
         driver.command_executor._commands['set_permission'] = (
             'POST', '/session/$sessionId/permissions')
@@ -128,9 +117,7 @@ def task(username, password, address, position, wxkey):
         )
         area.click()
         time.sleep(3)
-        print(address)
         pos = driver.find_element_by_xpath('//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/div[2]').text
-        print(pos)
         output_data += f'当前地址:{pos}{address}\n'
         # print()
         #自己输入的地理位置
@@ -152,43 +139,47 @@ def task(username, password, address, position, wxkey):
         # driver.save_screenshot(str(username) + "_success.png")
         driver.get("https://sctapi.ftqq.com/" + wxkey +".send?title="+ username + "打卡成功😝" + "&desp=" + output_data)
         print('打卡成功')
-        driver.quit()
+    except Exception as e:
+        status = driver.find_element_by_xpath('//*[@id="app"]/div/div[2]/div').text
+        if status == '上级部门已确认':
+            output_data = '未到打卡时间🙃' 
+        print(output_data)
+        # driver.get("https://sctapi.ftqq.com/" + wxkey +".send?title="+ username + "打卡失败🙃,请自行打卡" + "&desp=" + output_data)
+         
+    driver.quit()
             # return True
             # 截图
             # driver.save_screenshot(str(username) + "_fail.png")
             # return False
-    except Exception  as e:
-        driver.get("https://sctapi.ftqq.com/" + wxkey +".send?title="+ username + "打卡失败🙃,请自行打卡" + "&desp=" + output_data)
-        driver.quit()
         # 截图
         # driver.save_screenshot(str(username) + "_fail.png")
         # return False
 def run():
-    env_dist = os.environ
-    position = dict({
-            "latitude": env_dist['latitude'],    # 34.226692,
-            "longitude": env_dist['longitude'],  # 108.954232,
-            "accuracy": 100
-            })
-    task(env_dist['username'], env_dist['password'], env_dist['address'], position, env_dist['wxkey'])
-    # sendMail(env_dist['email'], env_dist['username'], '自动打卡回执', add)
+    # env_dist = os.environ
     # position = dict({
-    #         "latitude":  34.226692,
-    #         "longitude": 108.954232,
+    #         "latitude": env_dist['latitude'],    # 34.226692,
+    #         "longitude": env_dist['longitude'],  # 108.954232,
     #         "accuracy": 100
     #         })
-    # with open('config.json', 'r', encoding='utf-8') as f:
-    #     CONFIG = json.load(f)
-    #     users = CONFIG['userInfo']
-    #     address = CONFIG['address']
-    #     mail = CONFIG['mailInfo']
+    # task(env_dist['username'], env_dist['password'], env_dist['address'], position, env_dist['wxkey'])
+    # sendMail(env_dist['email'], env_dist['username'], '自动打卡回执', add)
+    position = dict({
+            "latitude":  34.226692,
+            "longitude": 108.954232,
+            "accuracy": 100
+            })
+    with open('config.json', 'r', encoding='utf-8') as f:
+        CONFIG = json.load(f)
+        users = CONFIG['userInfo']
+        address = CONFIG['address']
+        mail = CONFIG['mailInfo']
 
-    # for user in users:
-    #     add = address[random.randint(1, len(address) - 1)]
-    #     flag = task(username = user['id'], password = user['pw'], address = add, wxkey='', position=position)
-    #     intitle = "自动打卡回执"
-    #     sendMail(mailInfo=mail, userInfo=user, intitle=intitle, flag=flag, address=add)
-    #     time.sleep(random.randint(120, 180))
+    for user in users:
+        add = address[random.randint(1, len(address) - 1)]
+        flag = task(username = user['id'], password = user['pw'], address = add, wxkey='', position=position)
+        intitle = "自动打卡回执"
+        # sendMail(mailInfo=mail, userInfo=user, intitle=intitle, flag=flag, address=add)
+        # time.sleep(random.randint(120, 180))
 if __name__ == "__main__":
     run()
     
