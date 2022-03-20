@@ -1,6 +1,7 @@
-from lib2to3.pgen2 import driver
 import time
 import os
+import json
+import random
 # from email.mime.image import MIMEImage
 from smtplib import SMTP_SSL
 from selenium import webdriver
@@ -73,10 +74,11 @@ def task(username, password, address, position, wxkey):
 
     chrome_option.add_argument('--headless')
     chrome_option.add_argument('--no-sandbox')
-    chrome_option.add_argument('--hide-scrollbars')
+    chrome_option.add_argument('window-size=1920x1080') # 指定浏览器分辨率
+    chrome_option.add_argument('--disable-gpu')
     chrome_option.add_experimental_option('excludeSwitches', ['enable-automation'])
     # action端
-    driver = webdriver.Chrome('/usr/bin/chromedriver', options=chrome_option)
+    driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver', options=chrome_option)
     # win端
     # driver = webdriver.Chrome(options=chrome_option)
     # driver = webdriver.Chrome()
@@ -181,7 +183,7 @@ def run():
 
     # for user in users:
     #     add = address[random.randint(1, len(address) - 1)]
-    #     flag = task(username = user['id'], password = user['pw'], address = add, position=position)
+    #     flag = task(username = user['id'], password = user['pw'], address = add, wxkey='', position=position)
     #     intitle = "自动打卡回执"
     #     sendMail(mailInfo=mail, userInfo=user, intitle=intitle, flag=flag, address=add)
     #     time.sleep(random.randint(120, 180))
