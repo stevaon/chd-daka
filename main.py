@@ -87,13 +87,13 @@ def task(username, password, address, position, wxkey):
     try:
         url_login='https://cdjk.chd.edu.cn'
         driver.get(url_login)
-        time.sleep(4)
+        time.sleep(3)
         # 判断是否正确进入登陆页面
-        while True:
-            if driver.title == "统一身份认证平台":
-                print(driver.title)
-                break
-            driver.get(url_login)
+        # while True:
+        # if driver.title == "统一身份认证平台":
+        #     print(driver.title)
+                # break
+            # driver.get(url_login)
         # 获取用户与密码输入框并输入
         driver.find_element_by_xpath('//*[@id="username"]').send_keys(username)
         time.sleep(1)
