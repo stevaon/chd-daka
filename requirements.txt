@@ -1,0 +1,2 @@
+APScheduler==3.2.0
+selenium==4.0.0a6
