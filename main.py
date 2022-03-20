@@ -79,7 +79,7 @@ def task(username, password, address, position, wxkey):
     # driver.set_window_size(500, 940)
     #登录
     try:
-        url_login='https://ids.chd.edu.cn/authserver/login?service=http%3A%2F%2Fcdjk.chd.edu.cn%2FhealthPunch%2Findex%2Flogin'
+        url_login='https://cdjk.chd.edu.cn'
         driver.get(url_login)
         time.sleep(4)
         # 判断是否正确进入登陆页面
@@ -94,8 +94,7 @@ def task(username, password, address, position, wxkey):
         driver.find_element_by_xpath('//*[@id="password"]').send_keys(password,Keys.ENTER)
         # 如果跳转到打卡页面,退出循环
         title = driver.title
-        currentPageUrl = driver.current_url
-        if title=='每日健康打卡' or "https://cdjk.chd.edu.cn" in currentPageUrl:
+        if title=='每日健康打卡':
             output_data = f'{username}登陆成功😝\n'
         else:
             output_data = f'{username}登录失败🙃\n'
