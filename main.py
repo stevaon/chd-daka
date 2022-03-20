@@ -96,9 +96,9 @@ def task(username, password, address, position, wxkey):
         title = driver.title
         currentPageUrl = driver.current_url
         if title=='每日健康打卡' or "https://cdjk.chd.edu.cn" in currentPageUrl:
-            output_data += f'{username}登陆成功😝\n'
+            output_data = f'{username}登陆成功😝\n'
         else:
-            outut_data += f'{username}登录失败🙃\n'
+            output_data = f'{username}登录失败🙃\n'
            
         # 伪装地址
         driver.command_executor._commands['set_permission'] = (
@@ -157,8 +157,6 @@ def task(username, password, address, position, wxkey):
         # driver.save_screenshot(str(username) + "_fail.png")
         # return False
 def run():
-    global output_data
-    
     env_dist = os.environ
     position = dict({
             "latitude": env_dist['latitude'],    # 34.226692,
