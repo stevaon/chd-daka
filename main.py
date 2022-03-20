@@ -6,6 +6,8 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 # from apscheduler.schedulers.background import BackgroundScheduler
 from selenium.webdriver.support.wait import WebDriverWait
+
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support import expected_conditions as EC
@@ -69,7 +71,7 @@ def sendMail(mailInfo, userInfo, intitle, flag, address):
         print(e.with_traceback)
     
 def task(username, password, address, position, wxkey):
-    chrome_option = webdriver.ChromeOptions()
+    chrome_option = Options()
 
     chrome_option.add_argument('--headless')
     chrome_option.add_argument('--no-sandbox')
