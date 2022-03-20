@@ -170,9 +170,7 @@ def run():
             "longitude": env_dist['longitude'],  # 108.954232,
             "accuracy": 100
             })
-    address = env_dist['address']
-    add = address[random.randint(1, len(address) - 1)]
-    task(env_dist['username'], env_dist['password'], add, position)
+    task(env_dist['username'], env_dist['password'], env_dist['address'], position)
     # sendMail(env_dist['email'], env_dist['username'], '自动打卡回执', add)
     # position = dict({
     #         "latitude":  34.226692,

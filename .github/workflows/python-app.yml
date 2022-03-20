@@ -46,6 +46,5 @@ jobs:
         # email: ${{ secrets.email }}
         latitude: ${{ secrets.latitude }}
         longitudu: ${{ secrets.longitudu }}
-        accuracy: ${{ secrets.accuracy }}
       run: |
         python main.py
