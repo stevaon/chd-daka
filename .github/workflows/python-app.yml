@@ -34,4 +34,4 @@ jobs:
         latitude: ${{ secrets.latitude }}
         longitude: ${{ secrets.longitude }}
       run: |
-        python ./main.py
+        python ./main-action.py
