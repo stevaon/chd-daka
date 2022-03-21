@@ -77,22 +77,20 @@ def task(username, password, address, position, wxkey):
         )
         commit.click()
         time.sleep(2)
-        output_data += "- 提交成功😝"
+        output_data += "\n- 提交成功😝"
         # 打卡结果信息
         name = driver.find_element_by_xpath('//*[@id="app"]/div/div[2]/div[2]/div[1]').text
         gh = driver.find_element_by_xpath('//*[@id="app"]/div/div[2]/div[2]/div[2]').text
         date = driver.find_element_by_xpath('//*[@id="app"]/div/div[2]/div[2]/div[3]').text
         
-        output_data += '- 打卡信息:'
-        output_data += f'''
-                        >{{
-
-                        >     {name},
-                        >     {gh},
-                        >     {date}
-
-                        > }}
-                                '''
+        output_data += '\n- 打卡信息:'
+        output_data += f'''\n
+                        >{{\n
+                        >     {name},\n
+                        >     {gh},\n
+                        >     {date}\n
+                        > }}\n
+                            '''
         driver.get("https://sctapi.ftqq.com/" + wxkey +".send?title="+ username + "打卡成功😝" + "&desp=" + output_data)
         print('打卡成功')
     except Exception as e:
