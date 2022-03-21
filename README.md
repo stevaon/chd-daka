@@ -40,7 +40,7 @@
 
 4. 添加信息
 
-   > `username`: 学号
+   > `username`: 学号  
    >
    > `password`:信息门户密码
    >
