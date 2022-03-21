@@ -102,6 +102,8 @@ def task(username, password, address, latitude, longitude, wxkey):
         }
     )
     print("=====================driver.execute is successful=====================")
+    print(latitude)
+    print(longitude)
     driver.execute_cdp_cmd(
         'Emulation.setGeolocationOverride', {
         'latitude': latitude,
