@@ -84,9 +84,13 @@ def task(username, password, address, position, wxkey):
     # driver = webdriver.Chrome()
     # driver.set_window_size(500, 940)
     #登录
+    
     url_login='https://cdjk.chd.edu.cn'
     driver.get(url_login)
-    time.sleep(3)
+    time.sleep(1)
+    while driver.title != "每日健康打卡":
+        driver.get(url_login)
+        time.sleep(1)
     driver.find_element_by_xpath('//*[@id="username"]').send_keys(username)
     time.sleep(1)
     driver.find_element_by_xpath('//*[@id="password"]').send_keys(password,Keys.ENTER)
