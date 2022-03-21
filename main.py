@@ -71,7 +71,7 @@ def sendMail(mailInfo, userInfo, intitle, flag, address):
     except Exception as e:
         print(e.with_traceback)
     
-def task(username, password, address, position, wxkey):
+def task(username, password, address, latitude, longitude, wxkey):
     chrome_option = Options()
 
     chrome_option.add_argument('--headless')
@@ -104,9 +104,9 @@ def task(username, password, address, position, wxkey):
     print("=====================driver.execute is successful=====================")
     driver.execute_cdp_cmd(
         'Emulation.setGeolocationOverride', {
-        'latitude': position['latitude'],
-        'longitude': position['longitude'],
-        'accuracy': position['accuracy']
+        'latitude': latitude,
+        'longitude': longitude,
+        'accuracy': 100
     })
     
     print("=====================driver.execute_cdp_cmd is successful=====================")
@@ -170,12 +170,12 @@ def task(username, password, address, position, wxkey):
         # return False
 def run():
     env_dist = os.environ
-    position = dict({
-            "latitude": env_dist['latitude'],    # 34.226692,
-            "longitude": env_dist['longitude'],  # 108.954232,
-            "accuracy": 100
-            })
-    task(env_dist['username'], env_dist['password'], env_dist['address'], position, env_dist['wxkey'])
+    # position = dict({
+    #         "latitude": env_dist['latitude'],    # 34.226692,
+    #         "longitude": env_dist['longitude'],  # 108.954232,
+    #         "accuracy": 100
+    #         })
+    task(env_dist['username'], env_dist['password'], env_dist['address'], env_dist['latitude'], env_dist['longitude'], env_dist['wxkey'])
     # sendMail(env_dist['email'], env_dist['username'], '自动打卡回执', add)
     # position = dict({
     #         "latitude":  34.226692,
