@@ -87,30 +87,10 @@ def task(username, password, address, position, wxkey):
     # driver = webdriver.Chrome()
     # driver.set_window_size(500, 940)
     #登录
+    output_data = ""
     url_login='https://cdjk.chd.edu.cn'
     driver.get(url_login)
-    time.sleep(1)
-    # 伪装地址
-    driver.command_executor._commands['set_permission'] = (
-        'POST', '/session/$sessionId/permissions')
-    print("=====================driver.command_executor._commands is successful=====================")
-    driver.execute(
-        'set_permission',
-        {
-            'descriptor': { 'name': 'geolocation' },
-            'state': 'granted'
-        }
-    )
-    print("=====================driver.execute is successful=====================")
-    driver.execute_cdp_cmd(
-        'Emulation.setGeolocationOverride', {
-        'latitude': position['latitude'],
-        'longitude': position['longitude'],
-        'accuracy': position['accuracy']
-    })
-    
-    print("=====================driver.execute_cdp_cmd is successful=====================")
-    time.sleep(1)
+    time.sleep(2)
     driver.find_element_by_xpath('//*[@id="username"]').send_keys(username)
     time.sleep(1)
     driver.find_element_by_xpath('//*[@id="password"]').send_keys(password,Keys.ENTER)
@@ -118,7 +98,26 @@ def task(username, password, address, position, wxkey):
     # 判断是否在打卡时间段
     try:
         output_data = '准备打卡😝...'
+        # 伪装地址
+        driver.command_executor._commands['set_permission'] = (
+            'POST', '/session/$sessionId/permissions')
+        print("=====================driver.command_executor._commands is successful=====================")
+        driver.execute(
+            'set_permission',
+            {
+                'descriptor': { 'name': 'geolocation' },
+                'state': 'granted'
+            }
+        )
+        print("=====================driver.execute is successful=====================")
+        driver.execute_cdp_cmd(
+            'Emulation.setGeolocationOverride', {
+            'latitude': position['latitude'],
+            'longitude': position['longitude'],
+            'accuracy': position['accuracy']
+        })
         
+        print("=====================driver.execute_cdp_cmd is successful=====================")
         time.sleep(2)
         #点击获取地理位置
         area = WebDriverWait(driver, 10).until(
