@@ -91,9 +91,9 @@ def task(username, password, address, position, wxkey):
     url_login='https://cdjk.chd.edu.cn'
     driver.get(url_login)
     time.sleep(1)
-    while driver.title != "每日健康打卡":
-        driver.get(url_login)
-        time.sleep(1)
+    # while driver.title != "每日健康打卡":
+    #     driver.get(url_login)
+    #     time.sleep(1)
     driver.find_element_by_xpath('//*[@id="username"]').send_keys(username)
     time.sleep(1)
     driver.find_element_by_xpath('//*[@id="password"]').send_keys(password,Keys.ENTER)
@@ -101,6 +101,7 @@ def task(username, password, address, position, wxkey):
     # 判断是否在打卡时间段
     try:
         output_data = '准备打卡😝...'
+        print(output_data)
         # 伪装地址
         driver.command_executor._commands['set_permission'] = (
             'POST', '/session/$sessionId/permissions')
