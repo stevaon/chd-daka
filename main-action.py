@@ -1,6 +1,5 @@
 import time
 import os
-import json
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
@@ -66,7 +65,7 @@ def task(username, password, address, position, wxkey):
         area.click()
         time.sleep(3)
         pos = driver.find_element_by_xpath('//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/div[2]').text
-        output_data += f'- 当前定位地址:{pos}{address}\n'
+        output_data += f'\n\n- 当前定位地址:{pos}{address}'
         #自己输入的地理位置
         driver.find_element_by_xpath('//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/textarea').send_keys(address)
 
@@ -77,20 +76,20 @@ def task(username, password, address, position, wxkey):
         )
         commit.click()
         time.sleep(2)
-        output_data += "\n- 提交成功😝"
+        output_data += "\n\n- 提交成功😝"
         # 打卡结果信息
         name = driver.find_element_by_xpath('//*[@id="app"]/div/div[2]/div[2]/div[1]').text
         gh = driver.find_element_by_xpath('//*[@id="app"]/div/div[2]/div[2]/div[2]').text
         date = driver.find_element_by_xpath('//*[@id="app"]/div/div[2]/div[2]/div[3]').text
         
-        output_data += '\n- 打卡信息:'
+        output_data += '\n\n- 打卡信息:'
         output_data += f'''\n
-                        >{{\n
-                        >     {name},\n
-                        >     {gh},\n
-                        >     {date}\n
-                        > }}\n
-                            '''
+\t> {{
+\t> \t{name},
+\t> \t{gh},
+\t> \t{date}
+\t> }}
+'''
         driver.get("https://sctapi.ftqq.com/" + wxkey +".send?title="+ username + "打卡成功😝" + "&desp=" + output_data)
         print('打卡成功')
     except Exception as e:
