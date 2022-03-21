@@ -70,7 +70,8 @@ def task(username, password, address, position, wxkey):
         area.click()
         time.sleep(3)
         pos = driver.find_element_by_xpath('//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/div[2]').text
-        output_data += f'\n\n- 当前定位地址:{pos}{address}'
+        output_data += '\n\n- 当前定位地址:'
+        output_data += f'\n\n\t> {pos}{address}'
         #自己输入的地理位置
         driver.find_element_by_xpath('//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/textarea').send_keys(address)
 
@@ -88,13 +89,7 @@ def task(username, password, address, position, wxkey):
         date = driver.find_element_by_xpath('//*[@id="app"]/div/div[2]/div[2]/div[3]').text
         
         output_data += '\n\n- 打卡信息:'
-        output_data += f'''\n
-\t> {{
-\t> \t{name},
-\t> \t{gh},
-\t> \t{date}
-\t> }}
-'''
+        output_data += f'\n\n\n\t> {{\n\n\t> \t{name},\n\n\t> \t{gh},\n\n\t> \t{date}\n\n\t> }}'
         print(output_data)
         data = {
             'text': f"{username}打卡成功😝",
