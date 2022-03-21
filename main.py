@@ -1,3 +1,4 @@
+from lib2to3.pgen2 import driver
 import time
 import os
 import json
@@ -5,6 +6,7 @@ import random
 # from email.mime.image import MIMEImage
 from smtplib import SMTP_SSL
 from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.chrome.options import Options
@@ -78,7 +80,8 @@ def task(username, password, address, position, wxkey):
     chrome_option.add_argument('--disable-gpu')
     chrome_option.add_experimental_option('excludeSwitches', ['enable-automation'])
     # action端
-    driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver', options=chrome_option)
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_option)
+    # driver = webdriver.Chrome(executable_path='/usr/bin/chromedriver', options=chrome_option)
     # win端
     # driver = webdriver.Chrome(options=chrome_option)
     # driver = webdriver.Chrome()
