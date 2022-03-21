@@ -1,5 +1,6 @@
 import time
 import os
+import requests
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
@@ -34,7 +35,7 @@ def task(username, password, address, position, wxkey):
 
     # 判断是否在打卡时间段
     try:
-        output_data = '- 准备打卡😝...'
+        output_data += '\n\n- 准备打卡😝...'
         # 伪装地址
         driver.command_executor._commands['set_permission'] = (
             'POST', '/session/$sessionId/permissions')
@@ -55,7 +56,11 @@ def task(username, password, address, position, wxkey):
             'longitude': position['longitude'],
             'accuracy': position['accuracy']
         })
-        
+        # Actions时区使用的是UTC时间...
+        driver.execute_cdp_cmd(
+            'Emulation.setTimezoneOverride',{
+            'timezoneId': 'Asia/Shanghai'
+        })
         print("=====================driver.execute_cdp_cmd is successful=====================")
         time.sleep(2)
         #点击获取地理位置
@@ -90,21 +95,39 @@ def task(username, password, address, position, wxkey):
 \t> \t{date}
 \t> }}
 '''
-        driver.get("https://sctapi.ftqq.com/" + wxkey +".send?title="+ username + "打卡成功😝" + "&desp=" + output_data)
+        print(output_data)
+        data = {
+            'text': f"{username}打卡成功😝",
+            'desp': output_data
+        }
+        requests.post('https://sctapi.ftqq.com/'+wxkey+'.send', data=data)
+        # driver.get("https://sctapi.ftqq.com/" + wxkey +".send?title="+ username + "打卡成功😝" + "&desp=" + output_data)
         print('打卡成功')
     except Exception as e:
         print("打卡失败")
-        output_data += e
+
+        output_data += f'''\n
+                \t ```python
+                \t{e}
+                '''
         print(e)
         try:
             status = driver.find_element_by_xpath('//*[@id="app"]/div/div[2]/div').text
             if status == '上级部门已确认':
-                output_data = '未到打卡时间🙃' 
+                output_data += '\n\n- 未到打卡时间🙃' 
         except Exception as es:
             print(e)
-            output_data += e
+            output_data += f'''\n
+                \t ```python
+                \t{e}
+                '''
         print(output_data)
-        driver.get("https://sctapi.ftqq.com/" + wxkey +".send?title="+ username + "打卡失败🙃,请自行打卡" + "&desp=" + output_data)
+        data = {
+            'text': f"{username}打卡失败🙃,请自行打卡",
+            'desp': output_data
+        }
+        requests.post('https://sctapi.ftqq.com/'+wxkey+'.send', data=data)
+        # driver.get("https://sctapi.ftqq.com/" + wxkey +".send?title="+ username + "打卡失败🙃,请自行打卡" + "&desp=" + output_data)
     driver.quit()
 def run():
     env_dist = os.environ
