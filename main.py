@@ -87,7 +87,6 @@ def task(username, password, address, position, wxkey):
     # driver = webdriver.Chrome()
     # driver.set_window_size(500, 940)
     #登录
-    
     url_login='https://cdjk.chd.edu.cn'
     driver.get(url_login)
     time.sleep(1)
@@ -101,10 +100,10 @@ def task(username, password, address, position, wxkey):
     # 判断是否在打卡时间段
     try:
         output_data = '准备打卡😝...'
-        print(output_data)
         # 伪装地址
         driver.command_executor._commands['set_permission'] = (
             'POST', '/session/$sessionId/permissions')
+        print("driver.command_executor._commands is successful")
         driver.execute(
             'set_permission',
             {
@@ -112,12 +111,16 @@ def task(username, password, address, position, wxkey):
                 'state': 'granted'
             }
         )
+        
+        print("driver.execute is successful")
         driver.execute_cdp_cmd(
             'Emulation.setGeolocationOverride', {
             "latitude": position['latitude'],
             "longitude": position['longitude'],
             "accuracy": position['accuracy']
         })
+        
+        print("driver.execute_cdp_cmd is successful")
         time.sleep(2)
         #点击获取地理位置
         area = WebDriverWait(driver, 10).until(
@@ -148,9 +151,15 @@ def task(username, password, address, position, wxkey):
         driver.get("https://sctapi.ftqq.com/" + wxkey +".send?title="+ username + "打卡成功😝" + "&desp=" + output_data)
         print('打卡成功')
     except Exception as e:
-        status = driver.find_element_by_xpath('//*[@id="app"]/div/div[2]/div').text
-        if status == '上级部门已确认':
-            output_data = '未到打卡时间🙃' 
+        output_data += e
+        print(e)
+        try:
+            status = driver.find_element_by_xpath('//*[@id="app"]/div/div[2]/div').text
+            if status == '上级部门已确认':
+                output_data = '未到打卡时间🙃' 
+        except Exception as es:
+            print(e)
+            output_data += e
         print(output_data)
         driver.get("https://sctapi.ftqq.com/" + wxkey +".send?title="+ username + "打卡失败🙃,请自行打卡" + "&desp=" + output_data)
          
