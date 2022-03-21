@@ -108,7 +108,6 @@ def task(username, password, address, position, wxkey):
             output_data += e
         print(output_data)
         driver.get("https://sctapi.ftqq.com/" + wxkey +".send?title="+ username + "打卡失败🙃,请自行打卡" + "&desp=" + output_data)
-         
     driver.quit()
 def run():
     env_dist = os.environ
