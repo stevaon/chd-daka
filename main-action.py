@@ -10,21 +10,15 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
-def task(username, password, address, position, wxkey):
-    chrome_option = Options()
+def push(text, output_data, wxkey):
+    data = {
+            'text': text,
+            'desp': output_data
+        }
+    requests.post('https://sctapi.ftqq.com/'+wxkey+'.send', data=data)
 
-    chrome_option.add_argument('--headless')
-    chrome_option.add_argument('--no-sandbox')
-    chrome_option.add_argument('--disable-gpu')
+def task(username, password, address, position, wxkey):
     
-    chrome_option.add_experimental_option('excludeSwitches', ['enable-automation'])
-    # action端
-    driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_option)
-    # Actions时区使用的是UTC时间...
-    driver.execute_cdp_cmd(
-        'Emulation.setTimezoneOverride',{
-        'timezoneId': 'Asia/Shanghai'
-    })
     #登录
     output_data = ""
     url_login='https://cdjk.chd.edu.cn/'
@@ -32,6 +26,20 @@ def task(username, password, address, position, wxkey):
     a = 0
     while flag:
         a += 1
+        chrome_option = Options()
+
+        chrome_option.add_argument('--headless')
+        chrome_option.add_argument('--no-sandbox')
+        chrome_option.add_argument('--disable-gpu')
+        
+        chrome_option.add_experimental_option('excludeSwitches', ['enable-automation'])
+        # action端
+        driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_option)
+        # Actions时区使用的是UTC时间...
+        driver.execute_cdp_cmd(
+            'Emulation.setTimezoneOverride',{
+            'timezoneId': 'Asia/Shanghai'
+        })
         driver.get(url_login)
         time.sleep(2)
         driver.refresh()
@@ -99,10 +107,11 @@ def task(username, password, address, position, wxkey):
            
             flag = False
             print('打卡成功')
+            driver.quit()
         except Exception as e:
             print(e)
             output_data += f'''\n\n```python
-            {e}'''
+            {e}\n'''
             text = f"{username}打卡失败🙃,请自行打卡"
             try:
                 driver.refresh()
@@ -115,19 +124,16 @@ def task(username, password, address, position, wxkey):
                     flag = False 
             except Exception as es:
                 output_data += f'''\n\n```python
-                {es}'''
+                {es}\n'''
                 print("正在重试...")
                 if a >= 5:
                     break
                 print(es)
             # requests.post('https://sctapi.ftqq.com/'+wxkey+'.send', data=data)
             print("打卡失败")
-    data = {
-            'text': text,
-            'desp': output_data
-        }
-    requests.post('https://sctapi.ftqq.com/'+wxkey+'.send', data=data)
-    driver.quit()
+            driver.quit()
+    
+    push(text, output_data, wxkey)
 def run():
     env_dist = os.environ
     position = dict({
