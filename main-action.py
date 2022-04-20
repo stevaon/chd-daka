@@ -23,34 +23,35 @@ def task(username, password, address, position, wxkey):
     output_data = ""
     url_login='https://cdjk.chd.edu.cn/'
     flag = True
+   
+    chrome_option = Options()
+
+    chrome_option.add_argument('--headless')
+    chrome_option.add_argument('--no-sandbox')
+    chrome_option.add_argument('--disable-gpu')
+    
+    chrome_option.add_experimental_option('excludeSwitches', ['enable-automation'])
+    # action端
+    driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_option)
+    # Actions时区使用的是UTC时间...
+    driver.execute_cdp_cmd(
+        'Emulation.setTimezoneOverride',{
+        'timezoneId': 'Asia/Shanghai'
+    })
+    driver.get(url_login)
+    time.sleep(2)
+    driver.refresh()
+    time.sleep(1)
+    print(driver.title)
+    driver.find_element(By.XPATH, '//*[@id="username"]').send_keys(username)
+    # driver.find_element(By.XPATH, '/html/body/div/div[4]/section/div[3]/div[1]/div/form/div/div[1]/div[1]/input').send_keys(username)
+    time.sleep(1)
+    # driver.find_element(By.XPATH, '/html/body/div/div[4]/section/div[3]/div[1]/div/form/div/div[1]/div[1]/input').send_keys(password, Keys.ENTER)
+    driver.find_element(By.XPATH, '//*[@id="password"]').send_keys(password,Keys.ENTER)
+    time.sleep(3)
     a = 0
     while flag:
         a += 1
-        chrome_option = Options()
-
-        chrome_option.add_argument('--headless')
-        chrome_option.add_argument('--no-sandbox')
-        chrome_option.add_argument('--disable-gpu')
-        
-        chrome_option.add_experimental_option('excludeSwitches', ['enable-automation'])
-        # action端
-        driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_option)
-        # Actions时区使用的是UTC时间...
-        driver.execute_cdp_cmd(
-            'Emulation.setTimezoneOverride',{
-            'timezoneId': 'Asia/Shanghai'
-        })
-        driver.get(url_login)
-        time.sleep(2)
-        driver.refresh()
-        time.sleep(1)
-        print(driver.title)
-        driver.find_element(By.XPATH, '//*[@id="username"]').send_keys(username)
-        # driver.find_element(By.XPATH, '/html/body/div/div[4]/section/div[3]/div[1]/div/form/div/div[1]/div[1]/input').send_keys(username)
-        time.sleep(1)
-        # driver.find_element(By.XPATH, '/html/body/div/div[4]/section/div[3]/div[1]/div/form/div/div[1]/div[1]/input').send_keys(password, Keys.ENTER)
-        driver.find_element(By.XPATH, '//*[@id="password"]').send_keys(password,Keys.ENTER)
-        time.sleep(3)
         # 判断是否在打卡时间段
         print(driver.title)
         try:
@@ -107,7 +108,6 @@ def task(username, password, address, position, wxkey):
            
             flag = False
             print('打卡成功')
-            driver.quit()
         except Exception as e:
             print(e)
             output_data += f'''\n\n```python
@@ -131,8 +131,8 @@ def task(username, password, address, position, wxkey):
                 print(es)
             # requests.post('https://sctapi.ftqq.com/'+wxkey+'.send', data=data)
             print("打卡失败")
-            driver.quit()
     
+    driver.quit() 
     push(text, output_data, wxkey)
 def run():
     env_dist = os.environ
