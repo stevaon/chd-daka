@@ -29,25 +29,24 @@ def task(username, password, address, position, wxkey):
     output_data = ""
     url_login='https://cdjk.chd.edu.cn/'
     flag = True
-
-    driver.get(url_login)
-    time.sleep(2)
-    driver.refresh()
-    time.sleep(1)
-    print(driver.title)
-    driver.find_element(By.XPATH, '//*[@id="username"]').send_keys(username)
-    # driver.find_element(By.XPATH, '/html/body/div/div[4]/section/div[3]/div[1]/div/form/div/div[1]/div[1]/input').send_keys(username)
-    time.sleep(1)
-    # driver.find_element(By.XPATH, '/html/body/div/div[4]/section/div[3]/div[1]/div/form/div/div[1]/div[1]/input').send_keys(password, Keys.ENTER)
-    driver.find_element(By.XPATH, '//*[@id="password"]').send_keys(password,Keys.ENTER)
-    time.sleep(3)
-    # 判断是否在打卡时间段
     a = 0
     while flag:
         a += 1
+        driver.get(url_login)
+        time.sleep(2)
+        driver.refresh()
+        time.sleep(1)
+        print(driver.title)
+        driver.find_element(By.XPATH, '//*[@id="username"]').send_keys(username)
+        # driver.find_element(By.XPATH, '/html/body/div/div[4]/section/div[3]/div[1]/div/form/div/div[1]/div[1]/input').send_keys(username)
+        time.sleep(1)
+        # driver.find_element(By.XPATH, '/html/body/div/div[4]/section/div[3]/div[1]/div/form/div/div[1]/div[1]/input').send_keys(password, Keys.ENTER)
+        driver.find_element(By.XPATH, '//*[@id="password"]').send_keys(password,Keys.ENTER)
+        time.sleep(3)
+        # 判断是否在打卡时间段
         print(driver.title)
         try:
-            output_data += '\n\n- 准备打卡😁...'
+            output_data += f'\n\n- 准备第{a}次打卡😁...'
             
             # 伪装地址
             driver.command_executor._commands['set_permission'] = (
@@ -102,21 +101,22 @@ def task(username, password, address, position, wxkey):
             print('打卡成功')
         except Exception as e:
             print(e)
-            output_data += f'''\n```python
+            output_data += f'''\n\n```python
             {e}'''
             text = f"{username}打卡失败🙃,请自行打卡"
             try:
                 driver.refresh()
                 time.sleep(2)
                 status = driver.find_element(By.XPATH, '//*[@id="app"]/div/div[2]/div').text
-                print(status)
+                # print(status)
                 if status == '该时间为非打卡时间' or status == '上级部门已确认':
                     output_data += '\n\n- 未到打卡时间...😅' 
-                    output_data += '\n\n- 晨卡打卡时间为:07:00:00-10:00:00----------午卡打卡时间为:10:00:01-22:00:00'
+                    output_data += '\n\n- 晨卡打卡时间为:07:00:00-10:00:00----------午卡打卡时间为:10:00:01-15:00:00'
                     flag = False 
             except Exception as es:
-                output_data += f'''\n```python
+                output_data += f'''\n\n```python
                 {es}'''
+                print("正在重试...")
                 if a >= 5:
                     break
                 print(es)
@@ -136,6 +136,7 @@ def run():
             "accuracy": 100
             })
     task(env_dist['username'], env_dist['password'], env_dist['address'], position, env_dist['wxkey'])
+
 if __name__ == "__main__":
     run()
     
