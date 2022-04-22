@@ -40,20 +40,20 @@ def task(username, password, address, position, wxkey):
     driver.get(url_login)
     time.sleep(2)
     while flag:
+        print(driver.title)
         # 偶尔莫名其妙进不去登录页面，只能多进几次试试了。。。
-        if driver.title == 'Unified identity authentication platform':
+        if 'platform' in driver.title or '平台' in driver.title:
             driver.find_element(By.XPATH, '//*[@id="username"]').send_keys(username)
             time.sleep(2)
             driver.find_element(By.XPATH, '//*[@id="password"]').send_keys(password,Keys.ENTER)
             time.sleep(2)
-            flag == False
+            break
         else:
             driver.get(url_login)
             time.sleep(2)
 
-
+    a = 0
     # 开始打卡 
-    flag = True
     while flag:
         a += 1
         try:         
