@@ -114,9 +114,9 @@ def task(username, password, address, position, wxkey):
             print('打卡成功')
         except Exception as e:
             print(e)
-            output_data += f'''\n\n```python
+            output_data += f'''\n\n\t```python
             {e}\n```
-            
+
             '''
             text = f"{username}打卡失败🙃,请自行打卡"
             try:
@@ -125,11 +125,12 @@ def task(username, password, address, position, wxkey):
                 status = driver.find_element(By.XPATH, '//*[@id="app"]/div/div[2]/div').text
                 # print(status)
                 if status == '该时间为非打卡时间' or status == '上级部门已确认':
+                    text = f"{username}打卡失败🙃,未到打卡时间"
                     output_data += '\n\n- 未到打卡时间...😅' 
-                    output_data += '\n\n- 晨卡打卡时间为:07:00:00-10:00:00----------午卡打卡时间为:10:00:01-15:00:00'
+                    output_data += '\n\n- 晨卡打卡时间为:07:00:00-10:00:00\n\n- 午卡打卡时间为:10:00:01-15:00:00'
                     flag = False 
             except Exception as es:
-                output_data += f'''\n```python
+                output_data += f'''\n\n\t```python
                 {es}\n```
 
                 '''
