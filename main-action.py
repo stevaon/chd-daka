@@ -1,10 +1,7 @@
 import time
 import os
-from turtle import position
-from warnings import catch_warnings
 import requests
 from selenium import webdriver
-from sklearn import tree
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
@@ -54,7 +51,7 @@ def task(username, password, address, position, wxkey):
             driver.get(url_login)
             time.sleep(2)
 
-            
+
     # 开始打卡 
     flag = True
     while flag:
