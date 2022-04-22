@@ -57,7 +57,7 @@ def task(username, password, address, position, wxkey):
     while flag:
         a += 1
         try:         
-            output_data += f'\n\n- 准备第{a}次打卡😁...'
+            output_data += f'\n\n- 尝试第{a}次打卡😁...'
             
             # 伪装地址
             driver.command_executor._commands['set_permission'] = (
@@ -112,10 +112,9 @@ def task(username, password, address, position, wxkey):
             print('打卡成功')
         except Exception as e:
             print(e)
-            output_data += f'''\n\n\t```python
-\t{e}
-\t```
-'''
+            output_data += '\n\n- 出错了😫...'
+            # 怎么循环打印异常信息呢？。。。。
+            output_data += f'\n\n\t- {e}\n\t'
             text = f"{username}打卡失败🙃,请自行打卡"
             try:
                 driver.refresh()
@@ -128,10 +127,8 @@ def task(username, password, address, position, wxkey):
                     output_data += '\n\n- 晨卡打卡时间为:07:00:00-10:00:00\n\n- 午卡打卡时间为:10:00:01-15:00:00'
                     flag = False 
             except Exception as es:
-                output_data += f'''\n\n\t```python
-\t{es}
-\t```
-'''
+                output_data += '\n\n- 出错了😫...'
+                output_data += f'\n\n\t- {es}\n\t'
                 print("正在重试...")
                 if a > 10:
                     break
