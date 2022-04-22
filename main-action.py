@@ -1,8 +1,10 @@
 import time
 import os
 from turtle import position
+from warnings import catch_warnings
 import requests
 from selenium import webdriver
+from sklearn import tree
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
@@ -38,27 +40,26 @@ def task(username, password, address, position, wxkey):
         'Emulation.setTimezoneOverride',{
         'timezoneId': 'Asia/Shanghai'
     })
-
     driver.get(url_login)
     time.sleep(2)
-    driver.refresh()
-    time.sleep(1)
-    print(driver.title)
-    driver.find_element(By.XPATH, '//*[@id="username"]').send_keys(username)
-    # driver.find_element(By.XPATH, '/html/body/div/div[4]/section/div[3]/div[1]/div/form/div/div[1]/div[1]/input').send_keys(username)
-    time.sleep(1)
-    # driver.find_element(By.XPATH, '/html/body/div/div[4]/section/div[3]/div[1]/div/form/div/div[1]/div[1]/input').send_keys(password, Keys.ENTER)
-    driver.find_element(By.XPATH, '//*[@id="password"]').send_keys(password,Keys.ENTER)
-    time.sleep(3)
-    
-    a = 0
+    while flag:
+        # 偶尔莫名其妙进不去登录页面，只能多进几次试试了。。。
+        if driver.title == 'Unified identity authentication platform':
+            driver.find_element(By.XPATH, '//*[@id="username"]').send_keys(username)
+            time.sleep(2)
+            driver.find_element(By.XPATH, '//*[@id="password"]').send_keys(password,Keys.ENTER)
+            time.sleep(2)
+            flag == False
+        else:
+            driver.get(url_login)
+            time.sleep(2)
+
+            
+    # 开始打卡 
+    flag = True
     while flag:
         a += 1
-        try:
-
-            # 判断是否在打卡时间段      
-            print(driver.title)
-            
+        try:         
             output_data += f'\n\n- 准备第{a}次打卡😁...'
             
             # 伪装地址
@@ -115,9 +116,9 @@ def task(username, password, address, position, wxkey):
         except Exception as e:
             print(e)
             output_data += f'''\n\n\t```python
-            {e}\n```
-
-            '''
+\t{e}
+\t```
+'''
             text = f"{username}打卡失败🙃,请自行打卡"
             try:
                 driver.refresh()
@@ -131,17 +132,18 @@ def task(username, password, address, position, wxkey):
                     flag = False 
             except Exception as es:
                 output_data += f'''\n\n\t```python
-                {es}\n```
-
-                '''
+\t{es}
+\t```
+'''
                 print("正在重试...")
-                if a >= 5:
+                if a > 10:
                     break
                 print(es)
             # requests.post('https://sctapi.ftqq.com/'+wxkey+'.send', data=data)
             print("打卡失败")
     
     driver.quit() 
+
     push(text, output_data, wxkey)
 def run():
     env_dist = os.environ
@@ -151,7 +153,6 @@ def run():
             "accuracy": 100
             })
     task(env_dist['username'], env_dist['password'], env_dist['address'], position, env_dist['wxkey'])
-
 if __name__ == "__main__":
     run()
     
