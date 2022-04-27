@@ -58,7 +58,7 @@ def task(username, password, address, position, wxkey):
         a += 1
         try:         
             output_data += f'\n\n- 尝试第{a}次打卡😁...'
-            
+            print(f'尝试第{a}次打卡😁...')
             # 伪装地址
             driver.command_executor._commands['set_permission'] = (
                 'POST', '/session/$sessionId/permissions')
@@ -109,9 +109,9 @@ def task(username, password, address, position, wxkey):
             text = f"{username}打卡成功😎"
            
             flag = False
-            print('打卡成功')
+            print(f"第{a}次打卡成功😎...")
         except Exception as e:
-            print(e)
+#             print(e)
             output_data += '\n\n- 出错了😫...'
             # 怎么循环打印异常信息呢？。。。。
             output_data += f'\n\n\t- {e}\n\t'
@@ -132,9 +132,9 @@ def task(username, password, address, position, wxkey):
                 print("正在重试...")
                 if a > 10:
                     break
-                print(es)
+#                 print(es)
             # requests.post('https://sctapi.ftqq.com/'+wxkey+'.send', data=data)
-            print("打卡失败")
+            print(f"第{a}次打卡失败🙃...")
     
     driver.quit() 
 
