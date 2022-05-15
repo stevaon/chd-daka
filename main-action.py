@@ -56,7 +56,9 @@ def task(username, password, address, position, wxkey):
     # 开始打卡 
     while flag:
         a += 1
-        try:         
+        try:    
+            print(driver.title)
+#             if "打卡" in driver.title or 
             output_data += f'\n\n- 尝试第{a}次打卡😁...'
             print(f'尝试第{a}次打卡😁...')
             # 伪装地址
@@ -99,6 +101,7 @@ def task(username, password, address, position, wxkey):
             commit.click()
             time.sleep(2)
             output_data += "\n\n- 提交成功😝..."
+            print(f"第{a}次打卡成功😎...")
             # 打卡结果信息
             name = driver.find_element_by_xpath('//*[@id="app"]/div/div[2]/div[2]/div[1]').text
             gh = driver.find_element_by_xpath('//*[@id="app"]/div/div[2]/div[2]/div[2]').text
@@ -109,7 +112,6 @@ def task(username, password, address, position, wxkey):
             text = f"{username}打卡成功😎"
            
             flag = False
-            print(f"第{a}次打卡成功😎...")
         except Exception as e:
 #             print(e)
             output_data += '\n\n- 出错了😫...'
