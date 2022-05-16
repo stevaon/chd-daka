@@ -26,9 +26,12 @@
 
 1. Fork本仓库
 
-2. 启用Actions
+2. 更改打卡时间
+   > 修改`.github\workflows\python-app.xml`中的`corn`配置,由于github服务器时间是utc时间,国内是东八区,所以`'21 23,2 * * *'`对应的就是国内的上午7点21和10点21
 
-3. 获取Server酱的`SendKey`
+3. 启用Actions
+
+4. 获取Server酱的`SendKey`
 
    > - 访问[Server酱官网](https://sct.ftqq.com/), 使用微信扫码登陆
    >
@@ -39,7 +42,7 @@
    >   ![image-20220320162345426](README.assets/image-20220320162345426.png)
    >   
 
-4. 添加信息
+5. 添加信息
 
    > `username`: 学号
    >
@@ -63,7 +66,7 @@
    >
    > ![image-20220320162911070](README.assets/image-20220320162911070.png)
 
-5.  打卡结果会推送到自己的微信（需要关注`方糖`服务号）上
+6.  打卡结果会推送到自己的微信（需要关注`方糖`服务号）上
     > 注:果果用户可以使用`PushDeer`通道,更方便喔,具体使用方法查看官方教程即可
     
     ![image-20220321142611699](README.assets/image-20220321142611699.png)
