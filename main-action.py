@@ -62,40 +62,41 @@ def task(username, password, address, position, wxkey):
             output_data += f'\n\n- 尝试第{a}次打卡😁...'
             print(f'尝试第{a}次打卡😁...')
         
-            isShow = False
-            while not isShow:
-                # 伪装地址
-                driver.command_executor._commands['set_permission'] = (
-                    'POST', '/session/$sessionId/permissions')
-                driver.execute(
-                    'set_permission',
-                    {
-                        'descriptor': { 'name': 'geolocation' },
-                        'state': 'granted'
-                    }
-                )
+#             isShow = False
+#             while not isShow:
+            # 伪装地址
+            driver.command_executor._commands['set_permission'] = (
+                'POST', '/session/$sessionId/permissions')
+            driver.execute(
+                'set_permission',
+                {
+                    'descriptor': { 'name': 'geolocation' },
+                    'state': 'granted'
+                }
+            )
 
-                # 这块太坑人了, execute_cdp_cmd()这个方法不接受str值,需要将str转为float........
-                driver.execute_cdp_cmd(
-                    'Emulation.setGeolocationOverride', {
-                    'latitude': position['latitude'],
-                    'longitude': position['longitude'],
-                    'accuracy': position['accuracy']
-                })
-                time.sleep(2)
-                #点击获取地理位置
-                area = WebDriverWait(driver, 10).until(
-                    EC.element_to_be_clickable((By.XPATH, '//*[@id="xxdz41"]'))
-                )
-                area.click()
-                time.sleep(3)
+            # 这块太坑人了, execute_cdp_cmd()这个方法不接受str值,需要将str转为float........
+            driver.execute_cdp_cmd(
+                'Emulation.setGeolocationOverride', {
+                'latitude': position['latitude'],
+                'longitude': position['longitude'],
+                'accuracy': position['accuracy']
+            })
+            time.sleep(2)
+            #点击获取地理位置
+            area = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="xxdz41"]'))
+            )
+            area.click()
+            time.sleep(3)
                 # 判断地理位置是否获取成功，成功则退出循环，否则继续获取位置
-                isShow = EC.text_to_be_present_in_element_value((By.XPATH, '//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/div[2]'), u'中国')
-
-            pos = driver.find_element(By.XPATH, '//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/div[2]').text
-            output_data += '\n\n- 当前定位地址:'
-            output_data += f'\n\n\t {pos}{address}'
-            #自己输入的地理位置
+#                 isShow = EC.text_to_be_present_in_element_value((By.XPATH, '//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/div[2]'), u'中国')
+#                 if isShow:
+                    
+#             pos = driver.find_element(By.XPATH, '//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/div[2]').text
+#             output_data += '\n\n- 当前定位地址:'
+#             output_data += f'\n\n\t {pos}{address}'
+            #自己输入的具体位置
             driver.find_element(By.XPATH, '//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/textarea').send_keys(address)
 
             
