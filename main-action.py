@@ -63,7 +63,7 @@ def task(username, password, address, position, wxkey):
             print(f'尝试第{a}次打卡😁...')
         
             isShow = False
-            while !isShow:
+            while not isShow:
                 # 伪装地址
                 driver.command_executor._commands['set_permission'] = (
                     'POST', '/session/$sessionId/permissions')
