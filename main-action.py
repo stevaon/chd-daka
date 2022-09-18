@@ -81,7 +81,6 @@ def task(username, password, address, position, wxkey):
                 'accuracy': position['accuracy']
             })
             time.sleep(2)
-            output_data += '\n\n- 伪装地址完成'
             # 模拟点击获取地理位置
             area = WebDriverWait(driver, 10).until(
                 EC.element_to_be_clickable((By.XPATH, '//*[@id="xxdz41"]'))
