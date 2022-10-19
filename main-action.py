@@ -124,21 +124,20 @@ def task(username, password, address, position, wxkey):
 #             print(e)
             output_data += '\n\n- 打卡出错了😫...'
             # 怎么循环打印异常信息呢？。。。。
-            output_data += f'\n\n\t- {e}\n\t'
+            # output_data += f'\n\n\t- {e}\n\t'
             text = f"{username}打卡失败🙃,请自行打卡"
             try:
                 driver.refresh()
                 time.sleep(2)
                 status = driver.find_element(By.XPATH, '//*[@id="app"]/div/div[2]/div').text
-                # print(status)
                 if status == '该时间为非打卡时间' or status == '上级部门已确认':
                     text = f"{username}打卡失败🙃,未到打卡时间"
                     output_data += '\n\n- 未到打卡时间...😅' 
                     output_data += '\n\n- 晨卡打卡时间为:07:00:00-10:00:00\n\n- 午卡打卡时间为:10:00:01-15:00:00'
                     flag = False 
             except Exception as es:
-                output_data += '\n\n- 出错了😫...'
-                output_data += f'\n\n\t- {es}\n\t'
+                # output_data += '\n\n- 出错了😫...'
+                # output_data += f'\n\n\t- {es}\n\t'
                 print("正在重试...")
                 if a > 10:
                     break
