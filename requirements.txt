@@ -1,3 +1,4 @@
 selenium==4.0.0a6
 webdriver-manager
 requests
+packaging
