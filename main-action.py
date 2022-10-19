@@ -17,8 +17,6 @@ def push(text, output_data, wxkey):
     requests.post('https://sctapi.ftqq.com/'+wxkey+'.send', data=data)
 
 def task(username, password, address, position, wxkey):
-    
-    #登录
     output_data = ""
     url_login='https://cdjk.chd.edu.cn/'
     flag = True
@@ -30,13 +28,14 @@ def task(username, password, address, position, wxkey):
     chrome_option.add_argument('--disable-gpu')
     
     chrome_option.add_experimental_option('excludeSwitches', ['enable-automation'])
-    # action端
     driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_option)
     # Actions时区使用的是UTC时间...
     driver.execute_cdp_cmd(
         'Emulation.setTimezoneOverride',{
         'timezoneId': 'Asia/Shanghai'
     })
+    
+    # 登录
     driver.get(url_login)
     time.sleep(2)
     print(driver.title)
@@ -59,48 +58,46 @@ def task(username, password, address, position, wxkey):
     # 开始打卡 
     while flag:
         a += 1
-        try:    
-            print(driver.title)
-#             if "打卡" in driver.title or 
-            output_data += f'\n\n- 尝试第{a}次打卡😁...'
-            print(f'尝试第{a}次打卡😁...')
+        print(driver.title)
+        output_data += f'\n\n- 尝试第{a}次打卡😁...'
+        # print(f'尝试第{a}次打卡😁...')
+    
+        # 伪装地址
+        driver.command_executor._commands['set_permission'] = (
+            'POST', '/session/$sessionId/permissions')
+        driver.execute(
+            'set_permission',
+            {
+                'descriptor': { 'name': 'geolocation' },
+                'state': 'granted'
+            }
+        )
         
-            # 伪装地址
-            driver.command_executor._commands['set_permission'] = (
-                'POST', '/session/$sessionId/permissions')
-            driver.execute(
-                'set_permission',
-                {
-                    'descriptor': { 'name': 'geolocation' },
-                    'state': 'granted'
-                }
-            )
-            
-            # 这块太坑人了, execute_cdp_cmd()这个方法不接受str值,需要将str转为float........
-            driver.execute_cdp_cmd(
-                'Emulation.setGeolocationOverride', {
-                'latitude': position['latitude'],
-                'longitude': position['longitude'],
-                'accuracy': position['accuracy']
-            })
-            time.sleep(2)
+        # 这块太坑人了, execute_cdp_cmd()这个方法不接受str值,需要将str转为float........
+        driver.execute_cdp_cmd(
+            'Emulation.setGeolocationOverride', {
+            'latitude': position['latitude'],
+            'longitude': position['longitude'],
+            'accuracy': position['accuracy']
+        })
+        time.sleep(2)
+        try:
             # 模拟点击获取地理位置
-            area = WebDriverWait(driver, 10).until(
+            area = WebDriverWait(driver, 15).until(
                 EC.element_to_be_clickable((By.XPATH, '//*[@id="xxdz41"]'))
             )
             area.click()
             time.sleep(3)
-            output_data += '\n\n- 模拟点击完成:'
+            output_data += '\n\n- 位置获取成功...'
             WebDriverWait(driver, 15).until(
                 EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/div[2]'))
             )
             pos = driver.find_element(By.XPATH, '//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/div[2]').text
-            output_data += '\n\n- 当前定位地址:'
+            output_data += '\n\n- 当前位置:'
             output_data += f'\n\n\t {pos}{address}'
             #自己输入的具体位置
             driver.find_element(By.XPATH, '//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/textarea').send_keys(address)
 
-            
             # 提交：
             commit =  WebDriverWait(driver, 10).until(
                 EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[2]/form/div[18]/div/div/span/button'))
@@ -121,10 +118,7 @@ def task(username, password, address, position, wxkey):
            
             flag = False
         except Exception as e:
-#             print(e)
-            output_data += '\n\n- 打卡出错了😫...'
-            # 怎么循环打印异常信息呢？。。。。
-            # output_data += f'\n\n\t- {e}\n\t'
+            output_data += '\n\n- 打卡出错😫...'
             text = f"{username}打卡失败🙃,请自行打卡"
             try:
                 driver.refresh()
@@ -136,17 +130,14 @@ def task(username, password, address, position, wxkey):
                     output_data += '\n\n- 晨卡打卡时间为:07:00:00-10:00:00\n\n- 午卡打卡时间为:10:00:01-15:00:00'
                     flag = False 
             except Exception as es:
-                # output_data += '\n\n- 出错了😫...'
-                # output_data += f'\n\n\t- {es}\n\t'
-                print("正在重试...")
+                # print("正在重试...")
                 if a > 10:
+                    output_data += '\n\n- 超过尝试次数，请自行打卡😫...'
                     break
-#                 print(es)
-            # requests.post('https://sctapi.ftqq.com/'+wxkey+'.send', data=data)
             print(f"第{a}次打卡失败🙃...")
     
     driver.quit() 
-
+    # 推送
     push(text, output_data, wxkey)
 def run():
     env_dist = os.environ

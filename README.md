@@ -10,7 +10,11 @@
 
 > python3.9.5
 ## 版本
- 
+- 1.0.3
+> 修复登录出错、缺少`packing`包的错误
+    >
+    >已`fork`仓库更新百度搜一下就行，也可以按照[这个](https://cloud.tencent.com/developer/article/2100672)更新
+
 - 1.0.2
 > 增加`Github Action `自动运行
 
@@ -125,7 +129,4 @@
 ## 参考
 
 部分代码参考自 [这位同学](https://gitee.com/git-lee/chd_DAKA/tree/master ), 感谢!!
-
-## Todo
-> 最近在忙秋招，忙完秋招再完善一下脚本
 
