@@ -83,23 +83,24 @@ def task(username, password, address, position, wxkey):
         time.sleep(2)
         try:
             # 模拟点击获取地理位置
-            area = WebDriverWait(driver, 15).until(
+            wait = WebDriverWait(driver, 15)
+            area = wait.until(
                 EC.element_to_be_clickable((By.XPATH, '//*[@id="xxdz41"]'))
             )
             area.click()
             time.sleep(3)
             output_data += '\n\n- 位置获取成功...'
-            WebDriverWait(driver, 15).until(
-                EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/div[2]'))
-            )
-            pos = driver.find_element(By.XPATH, '//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/div[2]').text
-            output_data += '\n\n- 当前位置:'
-            output_data += f'\n\n\t {pos}{address}'
+           
             #自己输入的具体位置
             driver.find_element(By.XPATH, '//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/textarea').send_keys(address)
 
+            pos = driver.find_element(By.XPATH, '//*[@id="app"]/div[2]/form/div[3]/div[2]/div/span/div[2]').text
+            output_data += '\n\n- 当前位置:'
+            output_data += f'\n\n\t {pos}{address}'
+
             # 提交：
-            commit =  WebDriverWait(driver, 10).until(
+            wait = WebDriverWait(driver, 10)
+            commit = wait.until(
                 EC.element_to_be_clickable((By.XPATH, '//*[@id="app"]/div[2]/form/div[18]/div/div/span/button'))
             )
             
@@ -119,6 +120,7 @@ def task(username, password, address, position, wxkey):
             flag = False
         except Exception as e:
             output_data += '\n\n- 打卡出错😫...'
+            output_data += f'\n\n\t- {e}\n\t'
             text = f"{username}打卡失败🙃,请自行打卡"
             try:
                 driver.refresh()
@@ -131,6 +133,7 @@ def task(username, password, address, position, wxkey):
                     flag = False 
             except Exception as es:
                 # print("正在重试...")
+                output_data += f'\n\n\t- {es}\n\t'
                 if a > 10:
                     output_data += '\n\n- 超过尝试次数，请自行打卡😫...'
                     break
