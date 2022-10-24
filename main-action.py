@@ -60,7 +60,7 @@ def task(username, password, address, position, wxkey):
         a += 1
         print(driver.title)
         output_data += f'\n\n- 尝试第{a}次打卡😁...'
-        # print(f'尝试第{a}次打卡😁...')
+        print(f'尝试第{a}次打卡😁...')
     
         # 伪装地址
         driver.command_executor._commands['set_permission'] = (
