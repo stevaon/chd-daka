@@ -6,7 +6,7 @@ name: chd-daka
 on:
   push:
   schedule:
-    - cron: '10 23,2 * * *'
+    - cron: '10 0,2 * * *'
     
 jobs:
   build:
@@ -29,12 +29,12 @@ jobs:
         pip install -r requirements.txt
     - name: 'chd-daka'
       env:
-        username: ${{ secrets.username }}
-        password: ${{ secrets.password }}
-        address: ${{ secrets.address }}
-        wxkey: ${{ secrets.wxkey}}
-        # email: ${{ secrets.email }}
-        latitude: ${{ secrets.latitude }}
-        longitude: ${{ secrets.longitude }}
+        username: ${{ 2020126027}}
+        password: ${{ 1996164yb }}
+        address: ${{长安大学雁塔校区第四教学楼}}
+        wxkey: ${{ SCT153884TZF1BNlDrhcx7Qr4J5Hl9NgvD}}
+        # email: ${{ 15951616163@163.com }}
+        latitude: ${{ 34.226630 }}
+        longitude: ${{108.955569 }}
       run: |
         python ./main-action.py
